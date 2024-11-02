@@ -70,20 +70,24 @@ export class UrlController {
     const { shortUrl } = req.params;
 
     try {
-      const urlRecord = await urlRepositories.findOneBy({ shortUrl });
+        const urlRecord = await urlRepositories.findOneBy({ shortUrl });
 
-      if (!urlRecord) {
-        throw new NotFoundError("URL not found");
-      }
+        if (!urlRecord) {
+            throw new NotFoundError("URL not found");
+        }
 
-      urlRecord.clickCount += 1;
-      await urlRepositories.save(urlRecord);
+        urlRecord.clickCount += 1;
+        await urlRepositories.save(urlRecord);
 
-      return res.redirect(urlRecord.originalUrl);
+        const fullShortUrl = `${req.protocol}://${req.get('host')}/${urlRecord.shortUrl}`;
+
+        // console.log(`Redirecting to: ${fullShortUrl}`);
+
+        return res.redirect(urlRecord.originalUrl);
     } catch (error) {
-      return next(new Error("Failed to redirect to url"));
+        return next(new Error("Failed to redirect to URL"));
     }
-  }
+}
 
   async get(req: Request, res: Response, next: NextFunction) {
     const user = req.user;
