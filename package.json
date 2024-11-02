@@ -37,6 +37,7 @@
     "express-async-errors": "^3.1.1",
     "express-prometheus-middleware": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "serve-static": "^1.15.0",
     "swagger-jsdoc": "^6.2.8",
