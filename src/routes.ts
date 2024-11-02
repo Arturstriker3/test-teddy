@@ -14,9 +14,7 @@ routes.get("/url/:shortUrl", new UrlController().redirect);
 
 // Private
 routes.use(authMiddleware);
-
 routes.get('/profile', new UserController().getProfile);
-
-
+routes.get('/url', new UrlController().get);
 
 export default routes;

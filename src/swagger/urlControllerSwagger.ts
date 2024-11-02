@@ -1,4 +1,3 @@
-
 /**
  * @swagger
  *   /url:
@@ -71,6 +70,82 @@
  *             schema:
  *               type: string
  *               example: "https://www.example.com"  # Substitua pelo valor real se necessário.
+ *       XXX:
+ *         description: API Errors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /url:
+ *   get:
+ *     summary: Retrieve a list of authenticated user URLs
+ *     tags: [Url]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: The page number to retrieve (default is 1).
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: The number of URLs to return per page (default is 10, maximum is 100).
+ *     responses:
+ *       200:
+ *         description: A successful response containing a list of URLs.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       urlId:
+ *                         type: integer
+ *                         description: The ID of the URL.
+ *                       originalUrl:
+ *                         type: string
+ *                         description: The original URL.
+ *                       shortUrl:
+ *                         type: string
+ *                         description: The shortened URL.
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         description: The creation timestamp of the URL.
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
+ *                         description: The last update timestamp of the URL.
+ *                       clickCount:
+ *                         type: integer
+ *                         description: The number of clicks on the shortened URL.
+ *                 total:
+ *                   type: integer
+ *                   description: The total number of URLs for the user.
+ *                 page:
+ *                   type: integer
+ *                   description: The current page number.
+ *                 lastPage:
+ *                   type: integer
+ *                   description: The last page number available.
  *       XXX:
  *         description: API Errors
  *         content:
