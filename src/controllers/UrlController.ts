@@ -173,7 +173,11 @@ export class UrlController {
       });
 
       if (!urlRecord) {
-        return next(new NotFoundError("URL not found or you do not have permission to update it"));
+        return next(
+          new NotFoundError(
+            "URL not found or you do not have permission to update it"
+          )
+        );
       }
 
       urlRecord.originalUrl = originalUrl;
@@ -192,6 +196,38 @@ export class UrlController {
         return res.status(400).json(validationError);
       }
       return next(new Error("Failed to update URL"));
+    }
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    const { urlId } = req.params;
+
+    try {
+      const user = req.user;
+
+      if (!user) {
+        return next(new UnauthorizedError("Not Authorized"));
+      }
+
+      const numericUrlId = parseInt(urlId, 10);
+
+      const urlRecord = await urlRepositories.findOneBy({
+        id: numericUrlId,
+        user: { id: user.id },
+      });
+
+      if (!urlRecord) {
+        return next(new NotFoundError("URL not found or you do not have permission to delete it"));
+      }
+
+      urlRecord.isActive = false;
+      await urlRepositories.save(urlRecord);
+
+      return res.status(200).json({
+        message: "URL deleted successfully",
+      });
+    } catch (error) {
+      return next(new Error("Failed to delete URL"));
     }
   }
 }

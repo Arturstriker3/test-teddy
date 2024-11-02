@@ -17,5 +17,6 @@ routes.use(authMiddleware);
 routes.get('/profile', new UserController().getProfile);
 routes.get('/urls', new UrlController().get);
 routes.patch("/urls/:urlId", new UrlController().patch);
+routes.delete("/urls/:urlId", new UrlController().delete);
 
 export default routes;

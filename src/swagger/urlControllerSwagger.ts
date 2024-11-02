@@ -213,3 +213,40 @@
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
+/**
+ * @swagger
+ * /urls/{urlId}:
+ *   delete:
+ *     summary: Delete an existing URL (logical delete)
+ *     tags: [Urls]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: urlId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the URL to be deleted.
+ *     responses:
+ *       200:
+ *         description: URL deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "URL deleted successfully"
+ *                 urlId:
+ *                   type: integer
+ *                   example: 123
+ *       XXX:
+ *         description: API Errors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
