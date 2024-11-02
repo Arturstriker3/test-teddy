@@ -59,4 +59,23 @@ export class UrlController {
             return next(new Error("Failed to create url"));
         }
     }
+
+    async redirect(req: Request, res: Response, next: NextFunction) {
+        const { shortUrl } = req.params;
+
+        try {
+            const urlRecord = await urlRepositories.findOneBy({ shortUrl });
+
+            if (!urlRecord) {
+                throw new NotFoundError("URL not found");
+            }
+
+            urlRecord.clickCount += 1;
+            await urlRepositories.save(urlRecord);
+
+            return res.redirect(urlRecord.originalUrl);
+        } catch (error) {
+            return next(new Error("Failed to redirect to url"));
+        }
+    }
 }
