@@ -12,9 +12,7 @@ routes.post('/login', new UserController().login);
 // Private
 routes.use(authMiddleware);
 
-routes.get('/private-data', (req, res) => {
-    res.status(200).json({ message: 'Esta é uma rota privada.' });
-});
+routes.get('/profile', new UserController().getProfile);
 
 
 

@@ -96,4 +96,23 @@ export class UserController {
       return next(new Error("Failed to login"));
     }
   }
+
+  async getProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = req.user;
+
+      if (!user) {
+        return next(new NotFoundError("User not found"));
+      }
+
+      return res.status(200).json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+      });
+    } catch (error) {
+      return next(new Error("Failed to get profile"));
+    }
+  }
 }

@@ -7,6 +7,13 @@
 
 /**
  * @swagger
+ * tags:
+ *   - name: Profile Management
+ *     description: Private endpoints associated to user profile management.
+ */
+
+/**
+ * @swagger
  * /register:
  *   post:
  *     tags: [Authentication]
@@ -87,6 +94,48 @@
  *                   type: string
  *                   description: JWT token for authenticated user.
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       XXX:
+ *         description: API Errors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /profile:
+ *   get:
+ *     tags: [Profile Management]
+ *     summary: Get user profile
+ *     description: This endpoint retrieves the profile information of the authenticated user.
+ *     security:
+ *       - bearerAuth: [] # Assumindo que a autenticação é feita via token JWT
+ *     responses:
+ *       200:
+ *         description: Profile retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: Unique identifier of the user.
+ *                   example: "12345"
+ *                 name:
+ *                   type: string
+ *                   description: Name of the user.
+ *                   example: "John Doe"
+ *                 email:
+ *                   type: string
+ *                   description: Email of the user.
+ *                   example: "john.doe@example.com"
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Date and time when the user was created.
+ *                   example: "2024-01-01T12:00:00Z"
  *       XXX:
  *         description: API Errors
  *         content:
