@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from 'typeorm';
+import { Url } from './Url';
 
 @Entity('users')
 export class User {
@@ -14,12 +15,18 @@ export class User {
     @Column({ type: 'text' })
     password: string;
 
+    @OneToMany(() => Url, (url) => url.user)
+    urls: Url[];
+
+    @Column({ type: 'boolean', default: true })
+    isActive: boolean;
+
     @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 
     @UpdateDateColumn({ type: 'timestamptz', nullable: true, default: () => 'NULL' })
     updatedAt: Date | null;
 
-    @Column({ type: 'boolean', default: true })
-    isActive: boolean;
+    @DeleteDateColumn({ type: 'timestamptz', nullable: true })
+    deletedAt: Date | null;
 }
