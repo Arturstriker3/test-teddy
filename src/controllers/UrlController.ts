@@ -9,7 +9,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { zodValidationError } from "../helpers/zodValidationError";
-import { IUrlPost, IUrlGet } from "../interfaces";
+import { IUrlPost, IUrlGet, IUrlPatch } from "../interfaces";
 import { generateShortUrl } from "../helpers/generateShortUrl";
 import "dotenv/config";
 
@@ -70,24 +70,26 @@ export class UrlController {
     const { shortUrl } = req.params;
 
     try {
-        const urlRecord = await urlRepositories.findOneBy({ shortUrl });
+      const urlRecord = await urlRepositories.findOneBy({ shortUrl });
 
-        if (!urlRecord) {
-            throw new NotFoundError("URL not found");
-        }
+      if (!urlRecord) {
+        throw new NotFoundError("URL not found");
+      }
 
-        urlRecord.clickCount += 1;
-        await urlRepositories.save(urlRecord);
+      urlRecord.clickCount += 1;
+      await urlRepositories.save(urlRecord);
 
-        const fullShortUrl = `${req.protocol}://${req.get('host')}/${urlRecord.shortUrl}`;
+      const fullShortUrl = `${req.protocol}://${req.get("host")}/${
+        urlRecord.shortUrl
+      }`;
 
-        // console.log(`Redirecting to: ${fullShortUrl}`);
+      // console.log(`Redirecting to: ${fullShortUrl}`);
 
-        return res.redirect(urlRecord.originalUrl);
+      return res.redirect(urlRecord.originalUrl);
     } catch (error) {
-        return next(new Error("Failed to redirect to URL"));
+      return next(new Error("Failed to redirect to URL"));
     }
-}
+  }
 
   async get(req: Request, res: Response, next: NextFunction) {
     const user = req.user;
@@ -143,6 +145,53 @@ export class UrlController {
         return res.status(400).json(validationError);
       }
       return next(new Error("Failed to retrieve urls"));
+    }
+  }
+
+  async patch(req: Request, res: Response, next: NextFunction) {
+    const { urlId } = req.params;
+    const updateUrlSchema = z
+      .object({
+        originalUrl: z.string().url("Invalid url format"),
+      })
+      .strict();
+
+    try {
+      const urlData: IUrlPatch = updateUrlSchema.parse(req.body);
+      const { originalUrl } = urlData;
+      const user = req.user;
+
+      if (!user) {
+        return next(new UnauthorizedError("Not Authorized"));
+      }
+
+      const numericUrlId = parseInt(urlId, 10);
+
+      const urlRecord = await urlRepositories.findOneBy({
+        id: numericUrlId,
+        user: { id: user.id },
+      });
+
+      if (!urlRecord) {
+        return next(new NotFoundError("URL not found or you do not have permission to update it"));
+      }
+
+      urlRecord.originalUrl = originalUrl;
+      await urlRepositories.save(urlRecord);
+
+      return res.status(200).json({
+        message: "URL updated successfully",
+        urlId: urlRecord.id,
+        originalUrl: urlRecord.originalUrl,
+        shortUrl: `${BASE_URL}/${urlRecord.shortUrl}`,
+        updatedAt: urlRecord.updatedAt,
+      });
+    } catch (error) {
+      const validationError = zodValidationError(error);
+      if (validationError) {
+        return res.status(400).json(validationError);
+      }
+      return next(new Error("Failed to update URL"));
     }
   }
 }

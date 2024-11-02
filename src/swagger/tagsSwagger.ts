@@ -15,6 +15,6 @@
 /**
  * @swagger
  * tags:
- *   - name: Url
+ *   - name: Urls
  *     description: Endpoints associated with URL shortening.
  */

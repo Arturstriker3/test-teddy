@@ -9,12 +9,13 @@ const routes = Router();
 // Public
 routes.post('/register', new UserController().register);
 routes.post('/login', new UserController().login);
-routes.post('/url', optionalAuthMiddleware, new UrlController().post);
-routes.get("/url/:shortUrl", new UrlController().redirect);
+routes.post('/urls', optionalAuthMiddleware, new UrlController().post);
+routes.get("/urls/:shortUrl", new UrlController().redirect);
 
 // Private
 routes.use(authMiddleware);
 routes.get('/profile', new UserController().getProfile);
-routes.get('/url', new UrlController().get);
+routes.get('/urls', new UrlController().get);
+routes.patch("/urls/:urlId", new UrlController().patch);
 
 export default routes;

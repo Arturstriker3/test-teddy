@@ -1,9 +1,9 @@
 /**
  * @swagger
- *   /url:
+ *   /urls:
  *     post:
  *       summary: Create a shortened URL and don't obligatory require authentication
- *       tags: [Url]
+ *       tags: [Urls]
  *       security:
  *         - bearerAuth: []
  *       requestBody:
@@ -49,10 +49,10 @@
 
 /**
  * @swagger
- * /url/{shortUrl}:
+ * /urls/{shortUrl}:
  *   get:
  *     summary: Redirect to the original URL using a shortened URL
- *     tags: [Url]
+ *     tags: [Urls]
  *     parameters:
  *       - in: path
  *         name: shortUrl
@@ -80,10 +80,10 @@
 
 /**
  * @swagger
- * /url:
+ * /urls:
  *   get:
  *     summary: Retrieve a list of authenticated user URLs
- *     tags: [Url]
+ *     tags: [Urls]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -146,6 +146,66 @@
  *                 lastPage:
  *                   type: integer
  *                   description: The last page number available.
+ *       XXX:
+ *         description: API Errors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /urls/{Id}:
+ *   patch:
+ *     summary: Update an existing original URL
+ *     tags: [Urls]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: urlId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the URL to be updated.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               originalUrl:
+ *                 type: string
+ *                 format: uri
+ *                 description: The new original URL to be updated.
+ *             required:
+ *               - originalUrl
+ *     responses:
+ *       200:
+ *         description: URL updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "URL updated successfully"
+ *                 urlId:
+ *                   type: integer
+ *                   example: 123
+ *                 originalUrl:
+ *                   type: string
+ *                   example: "https://novosite.com"
+ *                 shortUrl:
+ *                   type: string
+ *                   example: "http://localhost:3000/abc123"
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2024-11-02T12:34:56Z"
  *       XXX:
  *         description: API Errors
  *         content:
