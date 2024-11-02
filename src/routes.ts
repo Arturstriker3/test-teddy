@@ -1,11 +1,11 @@
 import { Router } from 'express';
-// import { LogController } from './controllers/LogController';
 import { authMiddleware } from "./middlewares/authMiddleware";
+import { UserController } from './controllers/UserController';
 
 const routes = Router();
 
 // Public
-// routes.post('/logs', new LogController().create);
+routes.post('/users', new UserController().post);
 
 
 // Private
