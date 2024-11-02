@@ -41,9 +41,13 @@ export class UserController {
 
       await userRepository.save(newUser);
 
-      const { password: _, ...user } = newUser;
+      const responseUser = {
+        name: newUser.name,
+        email: newUser.email,
+        createdAt: newUser.createdAt,
+      };
 
-      return res.status(201).json(user);
+      return res.status(201).json(responseUser);
     } catch (error) {
       const validationError = zodValidationError(error);
       if (validationError) {
