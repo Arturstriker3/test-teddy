@@ -82,22 +82,3 @@
  *           nullable: true
  *           example: null
  */
-
-// Errors
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Error:
- *       type: object
- *       properties:
- *         message:
- *           type: string
- *           description: The error message.
- *           example: Not Authorized
- *         status:
- *           type: integer
- *           description: The HTTP status code of the error.
- *           example: 401
- */

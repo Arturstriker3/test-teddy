@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { userRepository } from "../repositories/userRepositories";
 import jwt from 'jsonwebtoken';
+import { UnauthorizedError } from "../helpers/api-errors";
 
 type jwtPayload = {
     id: number;
@@ -14,7 +15,7 @@ export const authMiddleware = async (
     const { authorization } = req.headers;
 
     if (!authorization) {
-        return res.status(401).json({ message: 'Not Authorized' });
+        return next(new UnauthorizedError('Not Authorized'));
     }
 
     const token = authorization.split(' ')[1];
@@ -25,7 +26,7 @@ export const authMiddleware = async (
         const user = await userRepository.findOneBy({ id });
 
         if (!user) {
-            return res.status(401).json({ message: 'Not Authorized' });
+            return next(new UnauthorizedError('Not Authorized'));
         }
 
         const { password: _, ...loggedUser } = user;
@@ -33,6 +34,6 @@ export const authMiddleware = async (
 
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Invalid Token' });
+        return next(new UnauthorizedError('Invalid Token'));
     }
 };
