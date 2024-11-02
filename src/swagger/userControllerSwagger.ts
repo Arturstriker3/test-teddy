@@ -1,15 +1,15 @@
 /**
  * @swagger
  * tags:
- *   - name: User
- *     description: Endpoints associated to User model
+ *   - name: Authentication
+ *     description: Public endpoints associated to user authentication.
  */
 
 /**
  * @swagger
- * /users:
+ * /register:
  *   post:
- *     tags: [User]
+ *     tags: [Authentication]
  *     summary: Create a new user
  *     description: This endpoint creates a new user and returns the user object.
  *     requestBody:
@@ -45,6 +45,48 @@
  *                 email:
  *                   type: string
  *                   example: john.doe@example.com
+ *       XXX:
+ *         description: API Errors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     tags: [Authentication]
+ *     summary: Login a user
+ *     description: This endpoint allows a user to log in and returns a JWT token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: Email of the user.
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 description: Password for the user.
+ *                 example: secret123
+ *     responses:
+ *       200:
+ *         description: Login successful, returns the JWT token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT token for authenticated user.
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *       XXX:
  *         description: API Errors
  *         content:

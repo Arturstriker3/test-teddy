@@ -5,7 +5,8 @@ import { UserController } from './controllers/UserController';
 const routes = Router();
 
 // Public
-routes.post('/users', new UserController().post);
+routes.post('/register', new UserController().register);
+routes.post('/login', new UserController().login);
 
 
 // Private

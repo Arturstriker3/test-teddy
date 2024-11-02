@@ -33,11 +33,11 @@ const swaggerOptions = {
         },
       },
     },
-    security: [
-      {
-        jwtAuth: [],
-      },
-    ],
+    // security: [
+    //   {
+    //     jwtAuth: [],
+    //   },
+    // ],
   },
   apis: ["./src/swagger/*.ts", "./controllers/*.ts"],
 };
