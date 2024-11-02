@@ -17,7 +17,7 @@ const swaggerOptions = {
     info: {
       title: "Test Teddy Open Finance API",
       version: "1.0.0",
-      description: "API Test Teddy Open Finance documentation",
+      description: "API documentation",
     },
     servers: [
       {

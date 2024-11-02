@@ -4,74 +4,100 @@
  * @swagger
  * components:
  *   schemas:
- *     Log:
+ *     User:
  *       type: object
  *       properties:
- *         ip:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
  *           type: string
- *           description: User or author IP address.
- *         user:
+ *           example: "John Doe"
+ *         email:
  *           type: string
- *           description: Name of the user or author of the event.
- *         description:
+ *           example: "john.doe@example.com"
+ *         password:
  *           type: string
- *           description: Specific description of the event.
- *         geolocation:
- *           type: object
- *           properties:
- *             latitude:
- *               type: number
- *               description: Latitude of the event.
- *             longitude:
- *               type: number
- *               description: Longitude of the event.
- *         navMetadata:
- *           type: object
- *           properties:
- *             userAgent:
- *               type: string
- *               description: Browser User Agent.
- *             browser:
- *               type: string
- *               description: Browser name.
- *             os:
- *               type: string
- *               description: Operating system.
- *         extraMetaData:
- *           type: string
- *           description: Extra metadata information.
- *         timestampUTC:
+ *           example: "securepassword"
+ *         urls:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Url'
+ *         isActive:
+ *           type: boolean
+ *           example: true
+ *         createdAt:
  *           type: string
  *           format: date-time
- *           description: Log UTC timestamp.
- *         severity:
+ *           example: "2024-11-02T12:00:00Z"
+ *         updatedAt:
  *           type: string
- *           enum:
- *             - low
- *             - medium
- *             - high
- *             - critical
- *           description: Log severity level. Possible values are 'low', 'medium', 'high', 'critical'. Default is 'medium'.
- *       required:
- *         - ip
- *         - description
+ *           format: date-time
+ *           nullable: true
+ *           example: "2024-11-02T12:00:00Z"
+ *         deletedAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: null
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Url:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         shortUrl:
+ *           type: string
+ *           example: "http://short.url/abc123"
+ *         originalUrl:
+ *           type: string
+ *           example: "http://example.com/some/long/url"
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *           nullable: true
+ *         clickCount:
+ *           type: integer
+ *           example: 10
+ *         isActive:
+ *           type: boolean
+ *           example: true
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           example: "2024-11-02T12:00:00Z"
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: "2024-11-02T12:00:00Z"
+ *         deletedAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: null
  */
 
 // Errors
 
 /**
-* @swagger
-* components:
-*   schemas:
-*     Error:
-*       type: object
-*       properties:
-*         message:
-*           type: string
-*           description: The error message.
-*           example: The IP is mandatory and must be a valid IPv4 or IPv6 address.
-*         status:
-*           type: integer
-*           description: The HTTP status code of the error.
-*           example: 400
-*/
+ * @swagger
+ * components:
+ *   schemas:
+ *     Error:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: The error message.
+ *           example: Not Authorized
+ *         status:
+ *           type: integer
+ *           description: The HTTP status code of the error.
+ *           example: 401
+ */

@@ -14,7 +14,7 @@ AppDataSource.initialize().then(() => {
     api.use(corsMiddleware);
     api.use(express.json());
     api.use(timeoutMiddleware)
-    api.use('/api-docs', swaggerApp);
+    api.use('/docs', swaggerApp);
     api.use(metric);
 
     api.get('/status', async (_req, res, _next) => {
