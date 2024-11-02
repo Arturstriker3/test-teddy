@@ -34,6 +34,8 @@ export class UrlController {
                 urlExists = await urlRepositories.findOneBy({ shortUrl: shortCode });
             } while (urlExists);
 
+            const user = req.user;
+
             const newUrl = urlRepositories.create({
                 originalUrl: url,
                 shortUrl: shortCode,
@@ -47,7 +49,7 @@ export class UrlController {
             const responseUrl = {
                 url: shortUrlFull,
                 createdAt: newUrl.createdAt,
-                ...(newUrl.user && { userId: newUrl.user.id }),
+                ...(user && { userId: user.id }),
             };
     
             return res.status(201).json(responseUrl);
