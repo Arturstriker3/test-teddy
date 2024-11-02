@@ -16,7 +16,6 @@ AppDataSource.initialize().then(() => {
     api.use(timeoutMiddleware)
     api.use('/api-docs', swaggerApp);
     api.use(metric);
-    api.use(routes);
 
     api.get('/status', async (_req, res, _next) => {
         const environment = process.env.NODE_ENV || 'development';
@@ -24,6 +23,8 @@ AppDataSource.initialize().then(() => {
 
         return res.status(200).json(msg);
     });
+
+    api.use(routes);
 
     api.use(errorMiddleware);
     
