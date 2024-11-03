@@ -1,0 +1,12 @@
+
+DB_HOST = localhost
+DB_USER = admin
+DB_PASS = admin
+DB_NAME = teddy
+DB_PORT = 5432
+
+PORT = 5050
+
+JWT_SECRET = 1234567890123456789012345678teddy
+
+SERVER_URL = http://localhost:5050
