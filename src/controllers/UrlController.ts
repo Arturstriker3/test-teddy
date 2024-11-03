@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { urlRepositories } from "../repositories/urlRepositories";
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from "../helpers/api-errors";
+import { NotFoundError, UnauthorizedError, BadRequestError } from "../helpers/api-errors";
 import { z } from "zod";
 import { zodValidationError } from "../helpers/zodValidationError";
 import { IUrlPost, IUrlGet, IUrlPatch } from "../interfaces";
@@ -55,7 +52,7 @@ export class UrlController {
         ...(user && { userId: user.id }),
       };
 
-      logger(`URL created: ${responseUrl}`);
+      logger(`URL create method called`);
 
       return res.status(201).json(responseUrl);
     } catch (error) {
@@ -74,7 +71,7 @@ export class UrlController {
       const urlRecord = await urlRepositories.findOneBy({ shortUrl });
 
       if (!urlRecord) {
-        throw new NotFoundError("URL not found");
+        return new NotFoundError("URL not found");
       }
 
       urlRecord.clickCount += 1;
@@ -84,9 +81,7 @@ export class UrlController {
         urlRecord.shortUrl
       }`;
 
-      // console.log(`Redirecting to: ${fullShortUrl}`);
-
-      logger(`Redirecting to: ${fullShortUrl}`);
+      logger(`Redirect method called`);
 
       return res.redirect(urlRecord.originalUrl);
     } catch (error) {
@@ -136,7 +131,7 @@ export class UrlController {
         clickCount: url.clickCount,
       }));
 
-      logger(`URLs retrieved: ${responseUrls}`);
+      logger(`URLs retrieve method called`);
 
       return res.status(200).json({
         data: responseUrls,
@@ -154,7 +149,7 @@ export class UrlController {
   }
 
   async patch(req: Request, res: Response, next: NextFunction) {
-    const { urlId } = req.params;
+    const paramKeys = Object.keys(req.params);
     const updateUrlSchema = z
       .object({
         originalUrl: z.string().url("Invalid url format"),
@@ -162,6 +157,18 @@ export class UrlController {
       .strict();
 
     try {
+
+      if (paramKeys.length !== 1 || !("Id" in req.params)) {
+        return next(new BadRequestError("Invalid parameters. Only 'Id' should be provided."));
+      }
+
+      const { Id } = req.params;
+
+      const numericUrlId = parseInt(Id, 10);
+      if (isNaN(numericUrlId)) {
+        return 
+      }
+
       const urlData: IUrlPatch = updateUrlSchema.parse(req.body);
       const { originalUrl } = urlData;
       const user = req.user;
@@ -169,8 +176,6 @@ export class UrlController {
       if (!user) {
         return next(new UnauthorizedError("Not Authorized"));
       }
-
-      const numericUrlId = parseInt(urlId, 10);
 
       const urlRecord = await urlRepositories.findOneBy({
         id: numericUrlId,
@@ -188,7 +193,7 @@ export class UrlController {
       urlRecord.originalUrl = originalUrl;
       await urlRepositories.save(urlRecord);
 
-      logger(`URL updated: ${urlRecord}`);
+      logger(`URL update method called`);
 
       return res.status(200).json({
         message: "URL updated successfully",
@@ -207,16 +212,25 @@ export class UrlController {
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
-    const { urlId } = req.params;
+    const paramKeys = Object.keys(req.params);
 
     try {
+      if (paramKeys.length !== 1 || !("Id" in req.params)) {
+        return next(new BadRequestError("Invalid parameters. Only 'Id' should be provided."));
+      }
+
+      const { Id } = req.params;
+
+      const numericUrlId = parseInt(Id, 10);
+      if (isNaN(numericUrlId)) {
+        return 
+      }
+
       const user = req.user;
 
       if (!user) {
         return next(new UnauthorizedError("Not Authorized"));
       }
-
-      const numericUrlId = parseInt(urlId, 10);
 
       const urlRecord = await urlRepositories.findOneBy({
         id: numericUrlId,
@@ -224,13 +238,17 @@ export class UrlController {
       });
 
       if (!urlRecord) {
-        return next(new NotFoundError("URL not found or you do not have permission to delete it"));
+        return next(
+          new NotFoundError(
+            "URL not found or you do not have permission to delete it"
+          )
+        );
       }
 
       urlRecord.isActive = false;
       await urlRepositories.save(urlRecord);
 
-      logger(`URL deleted: ${urlRecord}`);
+      logger(`URL deleted method called`);
 
       return res.status(200).json({
         message: "URL deleted successfully",

@@ -28,7 +28,7 @@ services:
       PORT: 5050
       JWT_SECRET: 1234567890123456789012345678teddy
       SERVER_URL: http://localhost:5050
-      LOG_LEVEL: 0
+      LOG_LEVEL: 1
     ports:
       - "5050:5050"
     depends_on:

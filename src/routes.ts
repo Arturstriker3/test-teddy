@@ -16,7 +16,7 @@ routes.get("/urls/:shortUrl", new UrlController().redirect);
 routes.use(authMiddleware);
 routes.get('/profile', new UserController().getProfile);
 routes.get('/urls', new UrlController().get);
-routes.patch("/urls/:urlId", new UrlController().patch);
-routes.delete("/urls/:urlId", new UrlController().delete);
+routes.patch("/urls/:Id", new UrlController().patch);
+routes.delete("/urls/:Id", new UrlController().delete);
 
 export default routes;

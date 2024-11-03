@@ -1,0 +1,29 @@
+# Ignorar arquivos de configuração locais
+*.env
+*.env.*
+
+# Ignorar arquivos de cache e logs
+*.log
+*.cache
+*.pid
+
+# Ignorar arquivos de configuração IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignorar arquivos de controle de versão
+.git/
+.gitignore
+.gitmodules
+
+# Ignorar dependências locais
+node_modules/
+bower_components/
+.DS_Store
+
+# Ignorar arquivos de build e temporários
+*.swp
+*.lock
+dist

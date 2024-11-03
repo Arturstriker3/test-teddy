@@ -164,7 +164,7 @@
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: urlId
+ *         name: Id
  *         required: true
  *         schema:
  *           type: integer
@@ -224,7 +224,7 @@
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: urlId
+ *         name: Id
  *         required: true
  *         schema:
  *           type: integer

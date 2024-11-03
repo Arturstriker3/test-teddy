@@ -28,7 +28,9 @@ export class UserController {
       const userExist = await userRepository.findOneBy({ email });
 
       if (userExist) {
-        throw new BadRequestError("User already exists");
+        return res.status(400).json({ 
+          message: "Email already in use", 
+        });
       }
 
       const hashPassword = await bcrypt.hash(password, 10);
@@ -47,7 +49,7 @@ export class UserController {
         createdAt: newUser.createdAt,
       };
 
-      logger(`User register method called: ${responseUser}`);
+      logger(`User register method called`);
 
       return res.status(201).json(responseUser);
     } catch (error) {
@@ -77,20 +79,20 @@ export class UserController {
       const user = await userRepository.findOneBy({ email });
 
       if (!user) {
-        throw new BadRequestError("Invalid credentials");
+        return new BadRequestError("Invalid credentials");
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {
-        throw new BadRequestError("Invalid credentials");
+        return new BadRequestError("Invalid credentials");
       }
 
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET ?? "", {
         expiresIn: "7d",
       });
 
-      logger(`User login method called: ${user}`);
+      logger(`User login method called and token returned`);
 
       return res.status(200).json({ token });
     } catch (error) {
@@ -110,7 +112,7 @@ export class UserController {
         return next(new NotFoundError("User not found"));
       }
 
-      logger(`User getProfile method called: ${user}`);
+      logger(`User getProfile method called`);
 
       return res.status(200).json({
         id: user.id,
