@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { zodValidationError } from "../helpers/zodValidationError";
 import { IUserPost, IUserLogin } from "../interfaces";
+import { logger } from "../helpers/logger";
 
 export class UserController {
   async register(req: Request, res: Response, next: NextFunction) {
@@ -45,6 +46,8 @@ export class UserController {
         email: newUser.email,
         createdAt: newUser.createdAt,
       };
+
+      logger(`User register method called: ${responseUser}`);
 
       return res.status(201).json(responseUser);
     } catch (error) {
@@ -87,6 +90,8 @@ export class UserController {
         expiresIn: "7d",
       });
 
+      logger(`User login method called: ${user}`);
+
       return res.status(200).json({ token });
     } catch (error) {
       const validationError = zodValidationError(error);
@@ -104,6 +109,8 @@ export class UserController {
       if (!user) {
         return next(new NotFoundError("User not found"));
       }
+
+      logger(`User getProfile method called: ${user}`);
 
       return res.status(200).json({
         id: user.id,

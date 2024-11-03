@@ -1,17 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { urlRepositories } from "../repositories/urlRepositories";
 import {
-  BadRequestError,
   NotFoundError,
   UnauthorizedError,
 } from "../helpers/api-errors";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { zodValidationError } from "../helpers/zodValidationError";
 import { IUrlPost, IUrlGet, IUrlPatch } from "../interfaces";
 import { generateShortUrl } from "../helpers/generateShortUrl";
 import "dotenv/config";
+import { logger } from "../helpers/logger";
 
 const environment = process.env.NODE_ENV || "development";
 const serverUrl =
@@ -49,13 +47,15 @@ export class UrlController {
 
       await urlRepositories.save(newUrl);
 
-      const shortUrlFull = `${serverUrl}/${newUrl.shortUrl}`;
+      const shortUrlFull = `${serverUrl}/urls/${newUrl.shortUrl}`;
 
       const responseUrl = {
         url: shortUrlFull,
         createdAt: newUrl.createdAt,
         ...(user && { userId: user.id }),
       };
+
+      logger(`URL created: ${responseUrl}`);
 
       return res.status(201).json(responseUrl);
     } catch (error) {
@@ -85,6 +85,8 @@ export class UrlController {
       }`;
 
       // console.log(`Redirecting to: ${fullShortUrl}`);
+
+      logger(`Redirecting to: ${fullShortUrl}`);
 
       return res.redirect(urlRecord.originalUrl);
     } catch (error) {
@@ -128,11 +130,13 @@ export class UrlController {
       const responseUrls = urls.map((url) => ({
         urlId: url.id,
         originalUrl: url.originalUrl,
-        shortUrl: `${serverUrl}/${url.shortUrl}`,
+        shortUrl: `${serverUrl}/urls/${url.shortUrl}`,
         createdAt: url.createdAt,
         updatedAt: url.updatedAt,
         clickCount: url.clickCount,
       }));
+
+      logger(`URLs retrieved: ${responseUrls}`);
 
       return res.status(200).json({
         data: responseUrls,
@@ -184,6 +188,8 @@ export class UrlController {
       urlRecord.originalUrl = originalUrl;
       await urlRepositories.save(urlRecord);
 
+      logger(`URL updated: ${urlRecord}`);
+
       return res.status(200).json({
         message: "URL updated successfully",
         urlId: urlRecord.id,
@@ -223,6 +229,8 @@ export class UrlController {
 
       urlRecord.isActive = false;
       await urlRepositories.save(urlRecord);
+
+      logger(`URL deleted: ${urlRecord}`);
 
       return res.status(200).json({
         message: "URL deleted successfully",

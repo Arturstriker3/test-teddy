@@ -11,8 +11,6 @@ routes.post('/register', new UserController().register);
 routes.post('/login', new UserController().login);
 routes.post('/urls', optionalAuthMiddleware, new UrlController().post);
 routes.get("/urls/:shortUrl", new UrlController().redirect);
-routes.get("/:shortUrl", new UrlController().redirect);
-routes.get("/url/:shortUrl", new UrlController().redirect);
 
 // Private
 routes.use(authMiddleware);
