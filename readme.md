@@ -1,5 +1,4 @@
 # Teste Técnico Teddy Open Finance
-
 Esse repositório contém o teste técnico Teddy Open Finance realizado com Typescript/Node/Express/PostgreSQL.
 
 ## Atenção ao rodar
@@ -14,8 +13,8 @@ O projeto usa por padrão para API a porta 5050 e para o Banco de Dados 5432. Ca
 
 ## Entidades
 Para contrução desse projeto foi criada as entidades:
-- Users
-- Urls
+- User
+- Url
 
 <div align="center">
     <img src="image.png" alt="alt text" />
@@ -26,16 +25,21 @@ Para contrução desse projeto foi criada as entidades:
 - `username`: Nome de usuário.
 - `password`: Senha do usuário.
 - `email`: Email do usuário.
+- `isActive`: Controle lógico para delete.
 - `createdAt`: Data de criação do usuário.
 - `updatedAt`: Data de atualização do usuário.
+- `deletedAt`: Data de deletação lógica do usuário.
 
 ### Urls
 - `id`: Identificador único da URL.
 - `originalUrl`: URL original.
 - `shortUrl`: URL encurtada.
+- `clickCount`: Quantidade de vezes que foi usada a Url encurtada.
 - `userId`: Identificador do usuário que criou a URL.
+- `isActive`: Controle lógico para delete.
 - `createdAt`: Data de criação da URL.
 - `updatedAt`: Data de atualização da URL.
+- `deletedAt`: Data de deletação lógica da Url.
 
 ## Instalação
 
