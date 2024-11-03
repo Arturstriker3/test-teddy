@@ -1,0 +1,7 @@
+
+docker build -t test_teddy:latest .
+
+
+
+docker run -d --name container_test_teddy -e DB_HOST=localhost -e DB_USER=admin -e DB_PASS=admin -e DB_NAME=teddy -e DB_PORT=5432 -e PORT=5050 -e JWT_SECRET=1234567890123456789012345678teddy -e SERVER_URL=http://localhost:5050 -p 5050:5050 test_teddy:latest
+

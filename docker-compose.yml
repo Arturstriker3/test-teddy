@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: test_teddy_db_container
+    environment:
+      POSTGRES_DB: teddy
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test_teddy_api
+    environment:
+      DB_HOST: postgres
+      DB_USER: admin
+      DB_PASS: admin
+      DB_NAME: teddy
+      DB_PORT: 5432
+      PORT: 5050
+      JWT_SECRET: 1234567890123456789012345678teddy
+      SERVER_URL: http://localhost:5050
+    ports:
+      - "5050:5050"
+    depends_on:
+      - postgres
+    restart: on-failure
+
+volumes:
+  postgres_data:

@@ -13,9 +13,10 @@ import { IUrlPost, IUrlGet, IUrlPatch } from "../interfaces";
 import { generateShortUrl } from "../helpers/generateShortUrl";
 import "dotenv/config";
 
-const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? `${process.env.SERVER_URL}:${process.env.PORT}`
+const environment = process.env.NODE_ENV || "development";
+const serverUrl =
+  environment === "production"
+    ? `${process.env.SERVER_URL}`
     : `http://localhost:${process.env.PORT || "3000"}`;
 
 export class UrlController {
@@ -48,7 +49,7 @@ export class UrlController {
 
       await urlRepositories.save(newUrl);
 
-      const shortUrlFull = `${BASE_URL}/${newUrl.shortUrl}`;
+      const shortUrlFull = `${serverUrl}/${newUrl.shortUrl}`;
 
       const responseUrl = {
         url: shortUrlFull,
@@ -127,7 +128,7 @@ export class UrlController {
       const responseUrls = urls.map((url) => ({
         urlId: url.id,
         originalUrl: url.originalUrl,
-        shortUrl: `${BASE_URL}/${url.shortUrl}`,
+        shortUrl: `${serverUrl}/${url.shortUrl}`,
         createdAt: url.createdAt,
         updatedAt: url.updatedAt,
         clickCount: url.clickCount,
@@ -187,7 +188,7 @@ export class UrlController {
         message: "URL updated successfully",
         urlId: urlRecord.id,
         originalUrl: urlRecord.originalUrl,
-        shortUrl: `${BASE_URL}/${urlRecord.shortUrl}`,
+        shortUrl: `${serverUrl}/${urlRecord.shortUrl}`,
         updatedAt: urlRecord.updatedAt,
       });
     } catch (error) {

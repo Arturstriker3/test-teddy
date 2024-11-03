@@ -8,7 +8,7 @@ const swaggerApp = express();
 const environment = process.env.NODE_ENV || "development";
 const serverUrl =
   environment === "production"
-    ? `${process.env.SERVER_URL}:${process.env.PORT}`
+    ? `${process.env.SERVER_URL}`
     : `http://localhost:${process.env.PORT || "3000"}`;
 
 const swaggerOptions = {
