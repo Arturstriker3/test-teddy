@@ -216,7 +216,7 @@
 
 /**
  * @swagger
- * /urls/{urlId}:
+ * /urls/{Id}:
  *   delete:
  *     summary: Delete an existing URL (logical delete)
  *     tags: [Urls]
