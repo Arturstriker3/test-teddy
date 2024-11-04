@@ -199,7 +199,7 @@ export class UrlController {
         message: "URL updated successfully",
         urlId: urlRecord.id,
         originalUrl: urlRecord.originalUrl,
-        shortUrl: `${serverUrl}/${urlRecord.shortUrl}`,
+        shortUrl: `${serverUrl}/urls/${urlRecord.shortUrl}`,
         updatedAt: urlRecord.updatedAt,
       });
     } catch (error) {
