@@ -54,4 +54,15 @@
  *                   type: integer
  *                   description: HTTP status code.
  *                   example: 503
+ *             ConflictError:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Custom message for Conflict Error.
+ *                   example: URL is already logically deleted..
+ *                 status:
+ *                   type: integer
+ *                   description: HTTP status code.
+ *                   example: 409
  */

@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { urlRepositories } from "../repositories/urlRepositories";
-import { NotFoundError, UnauthorizedError, BadRequestError } from "../helpers/api-errors";
+import {
+  NotFoundError,
+  UnauthorizedError,
+  BadRequestError,
+  ConflictError
+} from "../helpers/api-errors";
 import { z } from "zod";
 import { zodValidationError } from "../helpers/zodValidationError";
 import { IUrlPost, IUrlGet, IUrlPatch } from "../interfaces";
@@ -157,16 +162,19 @@ export class UrlController {
       .strict();
 
     try {
-
       if (paramKeys.length !== 1 || !("Id" in req.params)) {
-        return next(new BadRequestError("Invalid parameters. Only 'Id' should be provided."));
+        return next(
+          new BadRequestError(
+            "Invalid parameters. Only 'Id' should be provided."
+          )
+        );
       }
 
       const { Id } = req.params;
 
       const numericUrlId = parseInt(Id, 10);
       if (isNaN(numericUrlId)) {
-        return 
+        return;
       }
 
       const urlData: IUrlPatch = updateUrlSchema.parse(req.body);
@@ -188,6 +196,10 @@ export class UrlController {
             "URL not found or you do not have permission to update it"
           )
         );
+      }
+
+      if (!urlRecord.isActive) {
+        return next(new ConflictError("URL is already logically deleted."));
       }
 
       urlRecord.originalUrl = originalUrl;
@@ -216,14 +228,18 @@ export class UrlController {
 
     try {
       if (paramKeys.length !== 1 || !("Id" in req.params)) {
-        return next(new BadRequestError("Invalid parameters. Only 'Id' should be provided."));
+        return next(
+          new BadRequestError(
+            "Invalid parameters. Only 'Id' should be provided."
+          )
+        );
       }
 
       const { Id } = req.params;
 
       const numericUrlId = parseInt(Id, 10);
       if (isNaN(numericUrlId)) {
-        return 
+        return;
       }
 
       const user = req.user;
@@ -243,6 +259,10 @@ export class UrlController {
             "URL not found or you do not have permission to delete it"
           )
         );
+      }
+
+      if (!urlRecord.isActive) {
+        return next(new ConflictError("URL is already logically deleted."));
       }
 
       urlRecord.isActive = false;

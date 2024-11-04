@@ -31,3 +31,9 @@ export class serviceUnavailable extends ApiError {
         super(message, 503);
     }
 }
+
+export class ConflictError extends ApiError {
+    constructor(message: string) {
+        super(message, 409);
+    }
+}
